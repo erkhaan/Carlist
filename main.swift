@@ -7,13 +7,32 @@ struct Car: Codable {
     var type: String
 }
 
-let unitToyota = Car(year: 1986,brand: "Toyota",model: "AE86",type: "Coupe")
-let unitBMW = Car(year: 1992,brand: "BMW",model: "E30",type: "Sedan")
-let unitSuzuki = Car(year: 1998,brand: "Suzuki",model: "Esteem",type: "Sedan")
+let unitToyota = Car(
+    year: 1986,
+    brand: "Toyota",
+    model: "AE86",
+    type: "Coupe"
+)
+let unitBMW = Car(
+    year: 1992,
+    brand: "BMW",
+    model: "E30",
+    type: "Sedan"
+)
+let unitSuzuki = Car(
+    year: 1998,
+    brand: "Suzuki",
+    model: "Esteem",
+    type: "Sedan"
+)
 
-var carList: Array<Car>  = [unitToyota, unitBMW, unitSuzuki]
+var carList: Array<Car>  = [
+    unitToyota,
+    unitBMW,
+    unitSuzuki
+]
 
-if UserDefaults.standard.object(forKey: "SavedCarList") != nil{
+if UserDefaults.standard.object(forKey: "SavedCarList") != nil {
     let storedObject: Data = UserDefaults.standard.object(forKey: "SavedCarList") as! Data
     let storedCar: [Car] = try! PropertyListDecoder().decode([Car].self, from: storedObject)
     carList = storedCar
@@ -33,11 +52,11 @@ while needToQuit == false {
     let userInput = readLine()
     print("\n")
 
-    switch userInput{
+    switch userInput {
     case "1":
         var cnt = 1
-        for i in carList{
-            print(cnt,i.brand, i.model, i.type, i.year)
+        for i in carList {
+            print(cnt, i.brand, i.model, i.type, i.year)
             cnt += 1
         }
         print("\n")
@@ -50,7 +69,12 @@ while needToQuit == false {
         let inputType = readLine()
         print("Type car year:")
         let inputYear = readLine()
-        let inputCar = Car(year: Int(inputYear!)!, brand: inputBrand!, model: inputModel!,type:inputType!)
+        let inputCar = Car(
+            year: Int(inputYear!)!,
+            brand: inputBrand!,
+            model: inputModel!,
+            type: inputType!
+        )
         carList.append(inputCar)
         print("Car was added\n")
     case "3":
@@ -62,7 +86,7 @@ while needToQuit == false {
         print("What car to edit?:")
         let inputIndex = Int(readLine()!)! - 1
         print("You selected:")
-        print(inputIndex + 1,carList[inputIndex].brand,carList[inputIndex].model,carList[inputIndex].type,carList[inputIndex].year)
+        print(inputIndex + 1, carList[inputIndex].brand, carList[inputIndex].model, carList[inputIndex].type, carList[inputIndex].year)
         print("What do you want to change?:")
         print("1. Brand")
         print("2. Model")
@@ -97,5 +121,5 @@ while needToQuit == false {
         break
     }
 
-    UserDefaults.standard.set(try! PropertyListEncoder().encode(carList),forKey: "SavedCarList")
+    UserDefaults.standard.set(try! PropertyListEncoder().encode(carList), forKey: "SavedCarList")
 }
