@@ -40,6 +40,13 @@ if UserDefaults.standard.object(forKey: "SavedCarList") != nil {
 
 var needToQuit = false
 
+func printCarList() {
+    for (index, elem) in carList.enumerated() {
+        print(index + 1, elem.brand, elem.model, elem.type, elem.year)
+    }
+    print("\n")
+}
+
 while needToQuit == false {
     print("Choose option:")
     print("1. Show list")
@@ -54,12 +61,7 @@ while needToQuit == false {
 
     switch userInput {
     case "1":
-        var cnt = 1
-        for i in carList {
-            print(cnt, i.brand, i.model, i.type, i.year)
-            cnt += 1
-        }
-        print("\n")
+        printCarList()
     case "2":
         print("Type car brand:")
         let inputBrand = readLine()
