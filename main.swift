@@ -1,38 +1,38 @@
 import Foundation
 
-struct car: Codable {
+struct Car: Codable {
     var year: Int
     var brand: String
     var model: String
     var type: String
 }
 
-let unitToyota = car(year: 1986,brand: "Toyota",model: "AE86",type: "Coupe")
-let unitBMW = car(year: 1992,brand: "BMW",model: "E30",type: "Sedan")
-let unitSuzuki = car(year: 1998,brand: "Suzuki",model: "Esteem",type: "Sedan")
+let unitToyota = Car(year: 1986,brand: "Toyota",model: "AE86",type: "Coupe")
+let unitBMW = Car(year: 1992,brand: "BMW",model: "E30",type: "Sedan")
+let unitSuzuki = Car(year: 1998,brand: "Suzuki",model: "Esteem",type: "Sedan")
 
-var carList: Array<car>  = [unitToyota, unitBMW, unitSuzuki]
+var carList: Array<Car>  = [unitToyota, unitBMW, unitSuzuki]
 
 if UserDefaults.standard.object(forKey: "SavedCarList") != nil{
     let storedObject: Data = UserDefaults.standard.object(forKey: "SavedCarList") as! Data
-    let storedCar: [car] = try! PropertyListDecoder().decode([car].self, from: storedObject)
+    let storedCar: [Car] = try! PropertyListDecoder().decode([Car].self, from: storedObject)
     carList = storedCar
 }
 
-var quit = 0
+var needToQuit = false
 
-while quit == 0 {
+while needToQuit == false {
     print("Choose option:")
     print("1. Show list")
     print("2. Add car")
     print("3. Delete car")
     print("4. Edit car")
     print("5. Quit\n")
-    
+
     print("Your input:")
     let userInput = readLine()
     print("\n")
-    
+
     switch userInput{
     case "1":
         var cnt = 1
@@ -50,7 +50,7 @@ while quit == 0 {
         let inputType = readLine()
         print("Type car year:")
         let inputYear = readLine()
-        let inputCar = car(year: Int(inputYear!)!, brand: inputBrand!, model: inputModel!,type:inputType!)
+        let inputCar = Car(year: Int(inputYear!)!, brand: inputBrand!, model: inputModel!,type:inputType!)
         carList.append(inputCar)
         print("Car was added\n")
     case "3":
@@ -89,13 +89,13 @@ while quit == 0 {
         }
         print("Edit was done\n")
     case "5":
-        quit = 1
+        needToQuit = true
         print("Quit\n")
     default:
-        quit = 1
+        needToQuit = true
         print("Wrong input\n")
         break
     }
-    
+
     UserDefaults.standard.set(try! PropertyListEncoder().encode(carList),forKey: "SavedCarList")
 }
