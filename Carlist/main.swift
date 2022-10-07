@@ -53,15 +53,14 @@ private func wrongInput() {
 }
 
 private func userInteraction() {
-    let userInput = readLine()
-    print()
     guard
-        let input = userInput,
+        let input = readLine(),
         let option = Options(rawValue: input)
     else {
         wrongInput()
         return
     }
+    print()
     switch option {
     case .show:
         printCarList()
@@ -90,8 +89,7 @@ private func printCarList() {
 
 private func userInput(_ property: String) -> String? {
     print("Type car \(property):")
-    let input = readLine()
-    guard let input = input else {
+    guard let input = readLine() else {
         return nil
     }
     return input
@@ -123,9 +121,8 @@ private func deleteCar() {
         return
     }
     print("What car to delete?:")
-    let inputIndex = readLine()
     guard
-        let inputIndex = inputIndex,
+        let inputIndex = readLine(),
         let index = Int(inputIndex),
         (1...carList.count).contains(index)
     else {
