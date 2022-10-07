@@ -1,12 +1,5 @@
 import Foundation
 
-struct Car: Codable {
-    var year: Int
-    var brand: String
-    var model: String
-    var type: String
-}
-
 let unitToyota = Car(
     year: 1986,
     brand: "Toyota",
