@@ -47,6 +47,11 @@ private func save() {
     UserDefaults.standard.set(try! PropertyListEncoder().encode(carList), forKey: "SavedCarList")
 }
 
+private func wrongInput() {
+    needToQuit = true
+    print("Wrong input\n")
+}
+
 private func userInteraction() {
     let userInput = readLine()
     print()
@@ -54,8 +59,7 @@ private func userInteraction() {
         let input = userInput,
         let option = Options(rawValue: input)
     else {
-        needToQuit = true
-        print("Wrong input\n")
+        wrongInput()
         return
     }
     switch option {
@@ -80,20 +84,31 @@ private func printCarList() {
     print()
 }
 
+private func userInput(_ property: String) -> String? {
+    print("Type car \(property):")
+    let input = readLine()
+    guard let input = input else {
+        return nil
+    }
+    return input
+}
+
 private func addCar() {
-    print("Type car brand:")
-    let inputBrand = readLine()
-    print("Type car model:")
-    let inputModel = readLine()
-    print("Type car type:")
-    let inputType = readLine()
-    print("Type car year:")
-    let inputYear = readLine()
+    guard
+        let brand = userInput("brand"),
+        let model = userInput("model"),
+        let type = userInput("type"),
+        let inputYear = userInput("year"),
+        let year = Int(inputYear)
+    else {
+        wrongInput()
+        return
+    }
     let inputCar = Car(
-        year: Int(inputYear!)!,
-        brand: inputBrand!,
-        model: inputModel!,
-        type: inputType!)
+        year: year,
+        brand: brand,
+        model: model,
+        type: type)
     carList.append(inputCar)
     print("Car was added\n")
 }
