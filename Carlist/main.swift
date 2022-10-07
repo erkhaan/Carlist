@@ -78,6 +78,10 @@ private func userInteraction() {
 }
 
 private func printCarList() {
+    guard !carList.isEmpty else {
+        print("No cars in list\n")
+        return
+    }
     for (index, elem) in carList.enumerated() {
         print(index + 1, elem.brand, elem.model, elem.type, elem.year)
     }
@@ -114,9 +118,21 @@ private func addCar() {
 }
 
 private func deleteCar() {
+    guard !carList.isEmpty else {
+        print("Nothing to delete\n")
+        return
+    }
     print("What car to delete?:")
-    let inputIndex = readLine()!
-    carList.remove(at: Int(inputIndex)! - 1)
+    let inputIndex = readLine()
+    guard
+        let inputIndex = inputIndex,
+        let index = Int(inputIndex),
+        (1...carList.count).contains(index)
+    else {
+        wrongInput()
+        return
+    }
+    carList.remove(at: index - 1)
     print("Deleted\n")
 }
 
