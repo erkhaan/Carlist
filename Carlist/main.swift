@@ -2,27 +2,6 @@ import Foundation
 
 // MARK: - Properties
 
-let unitToyota = Car(
-    year: 1986,
-    brand: "Toyota",
-    model: "AE86",
-    type: "Coupe")
-let unitBMW = Car(
-    year: 1992,
-    brand: "BMW",
-    model: "E30",
-    type: "Sedan")
-let unitSuzuki = Car(
-    year: 1998,
-    brand: "Suzuki",
-    model: "Esteem",
-    type: "Sedan")
-
-var carList = [
-    unitToyota,
-    unitBMW,
-    unitSuzuki]
-
 var needToQuit = false
 
 enum Options: String {
@@ -31,6 +10,13 @@ enum Options: String {
     case delete = "3"
     case edit = "4"
     case quit = "5"
+}
+
+enum Edit: Int, CaseIterable {
+    case brand = 1
+    case model
+    case type
+    case year
 }
 
 // MARK: - Functions
@@ -76,13 +62,17 @@ private func userInteraction() {
     }
 }
 
+func printCar(with index: Int, _ car: Car) {
+    print(index + 1, car.brand, car.model, car.type, car.year)
+}
+
 private func printCarList() {
     guard !carList.isEmpty else {
         print("No cars in list\n")
         return
     }
-    for (index, elem) in carList.enumerated() {
-        print(index + 1, elem.brand, elem.model, elem.type, elem.year)
+    for (index, car) in carList.enumerated() {
+        printCar(with: index, car)
     }
     print()
 }
@@ -134,34 +124,74 @@ private func deleteCar() {
 }
 
 private func editCar() {
+    guard
+        let index = selectedCar(),
+        let property = selectedProperty()
+    else {
+        return
+    }
+    settingProperty(at: index, property)
+}
+
+/// selection of car by index
+private func selectedCar() -> Int? {
     print("What car to edit?:")
-    let inputIndex = Int(readLine()!)! - 1
+    guard
+        let inputIndex = readLine(),
+        let inputInt = Int(inputIndex),
+        (1...carList.count).contains(inputInt)
+    else {
+        wrongInput()
+        return nil
+    }
+    let index = inputInt - 1
     print("You selected:")
-    print(inputIndex + 1, carList[inputIndex].brand, carList[inputIndex].model, carList[inputIndex].type, carList[inputIndex].year)
+    printCar(with: index, carList[index])
+    return index
+}
+
+/// selection of property
+private func selectedProperty() -> Edit? {
     print("What do you want to change?:")
     print("1. Brand")
     print("2. Model")
     print("3. Type")
     print("4. Year")
-    let inputChange = Int(readLine()!)
-    print("Type your edit:")
-    switch inputChange {
-    case 1:
-        let input = readLine()
-        carList[inputIndex].brand = input!
-    case 2:
-        let input = readLine()
-        carList[inputIndex].model = input!
-    case 3:
-        let input = readLine()
-        carList[inputIndex].type = input!
-    case 4:
-        let input = readLine()
-        carList[inputIndex].year = Int(input!)!
-    default:
-        print("Wrong input")
-        break
+    guard
+        let inputChange = readLine(),
+        let change = Int(inputChange),
+        (1...Edit.allCases.count).contains(change)
+    else {
+        wrongInput()
+        return nil
     }
+    let edit = Edit(rawValue: change)
+    return edit
+}
+
+/// setting new value of selected property
+private func settingProperty(at i: Int, _ edit: Edit) {
+    print("Type your edit:")
+    guard let input = readLine() else {
+        wrongInput()
+        return
+    }
+    switch edit {
+    case .brand:
+        carList[i].brand = input
+    case .model:
+        carList[i].model = input
+    case .type:
+        carList[i].type = input
+    case .year:
+        guard let input = Int(input) else {
+            wrongInput()
+            return
+        }
+        carList[i].year = input
+    }
+    print("New value:")
+    printCar(with: i, carList[i])
     print("Edit was done\n")
 }
 
